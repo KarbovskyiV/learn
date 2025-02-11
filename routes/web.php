@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\User;
 use App\Http\Controllers\ProfileController;
+use App\Http\Middleware\IsAdminMiddleware;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -16,12 +17,14 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
     Route::prefix('admin')
         ->name('admin.')
+        ->middleware(IsAdminMiddleware::class)
         ->group(function () {
             Route::resource('tasks', Admin\TaskController::class);
         });
 
     Route::prefix('user')
         ->name('user.')
+        ->middleware(IsAdminMiddleware::class)
         ->group(function () {
             Route::resource('tasks', User\TaskController::class);
         });
