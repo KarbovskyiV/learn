@@ -24,7 +24,6 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('user')
         ->name('user.')
-        ->middleware(IsAdminMiddleware::class)
         ->group(function () {
             Route::resource('tasks', User\TaskController::class);
         });
