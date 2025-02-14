@@ -11,8 +11,10 @@
                 <div class="p-6 text-gray-900">
                     <div class="overflow-hidden overflow-x-auto p-6 bg-white border-b border-gray-200">
                         <div class="min-w-full align-middle">
-                            <a href="{{ route('tasks.create') }}" class="underline">Add new task</a>
-                            <br /><br />
+                            @can('create', \App\Models\Task::class)
+                                <a href="{{ route('tasks.create') }}" class="underline">Add new task</a>
+                                <br /><br />
+                            @endcan
                             <table class="min-w-full divide-y divide-gray-200 border">
                                 <thead>
                                 <tr>
@@ -44,15 +46,19 @@
                                             {{ $task->due_date }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
-                                            <a href="{{ route('tasks.edit', $task) }}" class="underline">Edit</a>
+                                            @can('update', $task)
+                                                <a href="{{ route('tasks.edit', $task) }}" class="underline">Edit</a>
+                                            @endcan
                                             |
-                                            <form action="{{ route('tasks.destroy', $task) }}"
-                                                  class="inline-block"
-                                                  onsubmit="return confirm('Are you sure?')">
-                                                @method('DELETE')
-                                                @csrf
-                                                <button type="submit" class="underline text-red-600">Delete</button>
-                                            </form>
+                                            @can('delete', $task)
+                                                <form action="{{ route('tasks.destroy', $task) }}"
+                                                      class="inline-block"
+                                                      onsubmit="return confirm('Are you sure?')">
+                                                    @method('DELETE')
+                                                    @csrf
+                                                    <button type="submit" class="underline text-red-600">Delete</button>
+                                                </form>
+                                            @endcan
                                         </td>
                                     </tr>
                                 @endforeach
